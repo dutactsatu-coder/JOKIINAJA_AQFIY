@@ -2,7 +2,7 @@
 <html lang="id" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>JOKIINAJA — Joki Tugas Profesional</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
@@ -16,6 +16,7 @@
 --border:rgba(255,255,255,.15);
 --text:#e6eeff;
 --header-h:90px;
+--safe-bottom: env(safe-area-inset-bottom, 20px);
 }
 [data-theme="light"]{
 --bg:#eef6ff;
@@ -57,13 +58,13 @@ background:linear-gradient(90deg,var(--primary),var(--accent));
 }
 .logo-sub{font-size:.7rem;letter-spacing:.14em;opacity:.7}
 
-/* NAV */
 nav ul{display:flex;gap:2rem;list-style:none}
 nav a{
 color:var(--text);
 text-decoration:none;
 font-weight:500;
 position:relative;
+cursor:pointer;
 }
 nav a.active::after{
 content:"";
@@ -104,15 +105,16 @@ padding:1rem 2.3rem;
 border-radius:999px;
 border:1px solid var(--border);
 background:var(--glass);
-color:white;
+color:var(--text);
 font-weight:600;
 text-decoration:none;
 cursor:pointer;
 transition:.3s;
+display:inline-block;
 }
 .btn.primary{
 background:linear-gradient(135deg,var(--primary),var(--accent));
-border:none;
+border:none; color: white;
 }
 .btn:hover{
 transform:translateY(-4px);
@@ -125,20 +127,18 @@ section{padding:6rem 2rem}
 .title{text-align:center;margin-bottom:4rem}
 .title h2{font-size:2.8rem}
 
-/* REVEAL */
 .reveal{
 opacity:0;
-transform:translateY(70px) scale(.96);
-filter:blur(6px);
+transform:translateY(40px);
 transition:1s cubic-bezier(.19,1,.22,1);
 }
-.reveal.show{opacity:1;transform:none;filter:none}
+.reveal.show{opacity:1;transform:none}
 
 /* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:2.5rem;
+gap:2rem;
 }
 .card{
 background:var(--glass);
@@ -146,6 +146,7 @@ border:1px solid var(--border);
 border-radius:22px;
 padding:2.5rem;
 transition:.4s;
+text-align:center;
 }
 .card:hover{
 transform:translateY(-10px);
@@ -161,115 +162,146 @@ text-align:center;
 }
 .stats h3{font-size:2.6rem;color:var(--primary)}
 
-/* TESTIMONI */
-.testimonial{position:relative}
-.testi-viewport{overflow:hidden;padding:0 4rem}
-.testi-track{display:flex;gap:2rem;transition:.6s ease}
-.testi-card{
-min-width:calc(33.333% - 1.4rem);
-background:var(--glass);
-border:1px solid var(--border);
-border-radius:22px;
-padding:2rem;
+/* TESTIMONI - FIXED RESPONSIVE */
+.testimonial {
+    position: relative;
+    max-width: 1100px;
+    margin: auto;
 }
-.testi-card span{color:var(--primary);font-weight:600}
+.testi-viewport {
+    overflow: hidden;
+    width: 100%;
+    border-radius: 22px;
+}
+.testi-track {
+    display: flex;
+    gap: 1.5rem;
+    transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.testi-card {
+    flex: 0 0 calc(33.333% - 1rem); /* 3 Kolom di desktop */
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    box-sizing: border-box;
+}
+.testi-card span {
+    display: block;
+    margin-top: 15px;
+    color: var(--primary);
+    font-weight: 700;
+}
 
-.arrow{
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-width:52px;height:52px;
-border-radius:50%;
-display:grid;
-place-items:center;
-background:var(--glass);
-border:1px solid var(--border);
-font-size:2rem;
-cursor:pointer;
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--soft);
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: .3s;
 }
-.arrow.left{left:0}
-.arrow.right{right:0}
+.arrow.left { left: -55px; }
+.arrow.right { right: -55px; }
 
 /* AI POPUP */
 #aiPopup{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.7);
+background:rgba(0,0,0,.8);
 display:none;
 place-items:center;
 z-index:2000;
+backdrop-filter:blur(8px);
+padding:20px;
 }
 .ai-box{
-background:
-linear-gradient(var(--soft),var(--soft)) padding-box,
-linear-gradient(135deg,var(--primary),var(--accent)) border-box;
-border:2px solid transparent;
+background:var(--soft);
+border:2px solid var(--primary);
 border-radius:28px;
-padding:3rem;
-width:90%;
-max-width:460px;
-animation:pop .6s cubic-bezier(.19,1,.22,1);
-}
-@keyframes pop{
-from{transform:scale(.7);opacity:0}
-to{transform:scale(1);opacity:1}
-}
-.ai-box h3{text-align:center;font-size:1.9rem;margin-bottom:1.4rem}
-.ai-box label{display:block;margin:1rem 0 .4rem;opacity:.8}
-.ai-box select,.ai-box input{
+padding:2rem;
 width:100%;
-padding:.9rem 1rem;
-border-radius:14px;
+max-width:460px;
+max-height: 90vh;
+overflow-y: auto;
+}
+.ai-box h3{text-align:center;font-size:1.8rem;margin-bottom:1rem}
+.ai-box label{display:block;margin:1rem 0 .4rem;opacity:.8;font-size:0.9rem}
+.ai-box select, .ai-box input{
+width:100%;
+padding:.8rem;
+border-radius:12px;
 border:1px solid var(--border);
 background:var(--glass);
 color:var(--text);
+outline:none;
 }
 .ai-total{
-margin:1.8rem 0;
-font-size:2.4rem;
+margin:1.5rem 0;
+font-size:2.2rem;
 text-align:center;
 color:var(--primary);
 font-weight:800;
 }
 
-/* FLOATING */
+/* FLOATING BUTTONS */
+.float-container {
+    position: fixed;
+    right: 20px;
+    bottom: var(--safe-bottom);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 999;
+}
 .float{
-position:fixed;
-right:20px;
-z-index:999;
-width:58px;
-height:58px;
-border-radius:50%;
-display:grid;
-place-items:center;
-background:linear-gradient(135deg,var(--primary),var(--accent));
+    width:55px;height:55px;
+    border-radius:50%;
+    display:grid;place-items:center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
-.float svg{width:28px;height:28px}
-.float.wa{bottom:90px}
-.float.ig{bottom:20px}
+.float.wa { background: #25d366; }
+.float.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.float svg{width:26px;height:26px}
 
-/* RESPONSIVE */
+/* RESPONSIVE BREAKPOINTS */
+@media(max-width:1150px) {
+    .arrow.left { left: 10px; }
+    .arrow.right { right: 10px; }
+}
+
 @media(max-width:900px){
-.testi-card{min-width:100%}
-.testi-viewport{padding:0}
-.arrow{top:100%;transform:none;margin-top:1.5rem}
-.arrow.left{left:40%}
-.arrow.right{right:40%}
+    .testi-card { flex: 0 0 calc(50% - 0.75rem); }
 }
+
 @media(max-width:768px){
-nav ul{
-position:absolute;
-top:100%;
-right:0;
-background:var(--soft);
-flex-direction:column;
-width:220px;
-padding:1.5rem;
-display:none;
-}
-nav ul.show{display:flex}
-.menu{display:block}
-.hero h1{font-size:2.4rem}
+    nav ul{
+        position:fixed;top:0;right:-100%;
+        background:var(--soft);
+        flex-direction:column;
+        width:260px;height: 100vh;
+        padding:5rem 2rem;
+        transition: 0.4s;
+    }
+    nav ul.show{right:0}
+    .menu{display:block; z-index: 1001;}
+    .hero h1{font-size:2.5rem}
+    
+    .testi-card { flex: 0 0 100%; } /* Satu ulasan per layar di HP */
+    .arrow { top: auto; bottom: -60px; transform: none; }
+    .arrow.left { left: 30%; }
+    .arrow.right { right: 30%; }
+    .testimonial { padding-bottom: 80px; }
 }
 </style>
 </head>
@@ -282,8 +314,8 @@ nav ul.show{display:flex}
 <span class="logo-main">JOKIINAJA</span>
 <span class="logo-sub">BY AQFIY</span>
 </div>
-<div class="menu" onclick="nav.classList.toggle('show')">☰</div>
-<ul id="nav">
+<div class="menu" id="menuBtn">☰</div>
+<ul id="navMenu">
 <li><a href="#home">Home</a></li>
 <li><a href="#services">Layanan</a></li>
 <li><a href="#stats">Keunggulan</a></li>
@@ -295,17 +327,17 @@ nav ul.show{display:flex}
 </nav>
 </header>
 
-<!-- HERO -->
 <section id="home" class="hero reveal">
 <div>
 <h1>Joki Tugas <span>Profesional</span><br>Pelajar & Mahasiswa</h1>
 <p>Cepat • Aman • 24/7 • Privasi 100%</p>
-<button class="btn primary" onclick="openAI()">Order via AI</button>
-<a class="btn" href="https://wa.me/6282125283598">WhatsApp</a>
+<div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+    <button class="btn primary" onclick="openAI()">Order via AI</button>
+    <a class="btn" href="https://wa.me/6282125283598">WhatsApp</a>
+</div>
 </div>
 </section>
 
-<!-- SERVICES -->
 <section id="services"><div class="container reveal">
 <div class="title"><h2>Layanan</h2></div>
 <div class="grid">
@@ -316,7 +348,6 @@ nav ul.show{display:flex}
 </div>
 </div></section>
 
-<!-- STATS -->
 <section id="stats"><div class="container reveal">
 <div class="title"><h2>Keunggulan</h2></div>
 <div class="stats">
@@ -327,7 +358,6 @@ nav ul.show{display:flex}
 </div>
 </div></section>
 
-<!-- PRICING -->
 <section id="pricing"><div class="container reveal">
 <div class="title"><h2>Harga Kisaran</h2></div>
 <div class="grid">
@@ -338,113 +368,152 @@ nav ul.show{display:flex}
 </div>
 </div></section>
 
-<!-- TESTIMONI -->
 <section id="testi"><div class="container reveal testimonial">
 <div class="title"><h2>Ulasan Pelanggan</h2></div>
 <div class="arrow left" onclick="slide(-1)">‹</div>
 <div class="arrow right" onclick="slide(1)">›</div>
 <div class="testi-viewport">
 <div class="testi-track" id="track">
-<div class="testi-card">"Cepat & rapi"<br><span>Rizky</span></div>
-<div class="testi-card">"PPT premium"<br><span>Fahmi</span></div>
-<div class="testi-card">"Deadline aman"<br><span>Aulia</span></div>
-<div class="testi-card">"Ringkasan jelas"<br><span>Nabila</span></div>
-<div class="testi-card">"Langganan"<br><span>Kevin</span></div>
-<div class="testi-card">"Privasi aman"<br><span>Anon</span></div>
+<div class="testi-card">"Pengerjaan sangat cepat dan rapi banget hasilnya."<br><span>Rizky</span></div>
+<div class="testi-card">"PPT premium desainnya keren, dapet nilai A!"<br><span>Fahmi</span></div>
+<div class="testi-card">"Deadline mepet tetap aman ditangan admin."<br><span>Aulia</span></div>
+<div class="testi-card">"Ringkasan materinya jelas dan mudah dipahami."<br><span>Nabila</span></div>
+<div class="testi-card">"Sudah jadi langganan tiap semester. Mantap!"<br><span>Kevin</span></div>
+<div class="testi-card">"Privasi benar-benar dijaga. Recommended!"<br><span>Anonim</span></div>
 </div>
 </div>
 </div></section>
 
-<!-- AI ORDER -->
 <div id="aiPopup">
 <div class="ai-box">
 <h3>AI Order</h3>
-<label>Jenis</label>
-<select id="type" onchange="calcAI()">
-<option value="laporan">Laporan (4k)</option>
-<option value="ppt">PPT (4.5k)</option>
-<option value="ringkasan">Ringkasan (5k)</option>
-<option value="jurnal">Jurnal (6k)</option>
+<label>Jenis Tugas</label>
+<select id="type">
+<option value="laporan">Laporan (4k/hal)</option>
+<option value="ppt">PPT (4.5k/slide)</option>
+<option value="ringkasan">Ringkasan (5k/hal)</option>
+<option value="jurnal">Jurnal (6k/hal)</option>
 </select>
-<label>Jumlah Slide</label>
-<input type="number" id="slide" value="1" oninput="calcAI()">
-<label><input type="checkbox" id="urgent" onchange="calcAI()"> Urgent +15k</label>
-<div class="ai-total" id="total">Rp 0</div>
-<button class="btn primary" onclick="sendWA()">Order WhatsApp</button>
-<button class="btn" onclick="closeAI()">Tutup</button>
+<label>Jumlah Slide/Halaman</label>
+<input type="number" id="slide" value="1" min="1">
+<label style="display:flex; align-items:center; gap:10px; cursor:pointer">
+    <input type="checkbox" id="urgent" style="width:auto"> Urgent (Ekspres) +15k
+</label>
+<div class="ai-total" id="totalDisplay">Rp 0</div>
+<button class="btn primary" style="width:100%; margin-bottom:10px" onclick="sendWA()">Order via WhatsApp</button>
+<button class="btn" style="width:100%" onclick="closeAI()">Tutup</button>
 </div>
 </div>
 
-<!-- FLOATING LOGO ASLI -->
-<a class="float wa" href="https://wa.me/6282125283598" aria-label="WhatsApp">
-<svg viewBox="0 0 32 32" fill="white"><path d="M16 2.9C8.7 2.9 2.9 8.7 2.9 16c0 2.6.7 5.1 2.1 7.2L3 29l6-1.9c2 1.1 4.4 1.7 7 1.7 7.3 0 13.1-5.8 13.1-13.1S23.3 2.9 16 2.9z"/></svg>
-</a>
-
-<a class="float ig" href="https://instagram.com/jokiinaja_byaqfiy" aria-label="Instagram">
-<svg viewBox="0 0 24 24" fill="white"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5z"/></svg>
-</a>
+<div class="float-container">
+    <a class="float wa" href="https://wa.me/6282125283598" aria-label="WhatsApp">
+        <svg viewBox="0 0 32 32" fill="white"><path d="M16 2.9C8.7 2.9 2.9 8.7 2.9 16c0 2.6.7 5.1 2.1 7.2L3 29l6-1.9c2 1.1 4.4 1.7 7 1.7 7.3 0 13.1-5.8 13.1-13.1S23.3 2.9 16 2.9z"/></svg>
+    </a>
+    <a class="float ig" href="https://instagram.com/jokiinaja_byaqfiy" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5z M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>
+    </a>
+</div>
 
 <script>
 const PRICE={laporan:4000,ppt:4500,ringkasan:5000,jurnal:6000};
+let lastTotal = 0;
 
-function openAI(){aiPopup.style.display="grid";calcAI()}
-function closeAI(){aiPopup.style.display="none"}
-function calcAI(){
-let t=type.value;
-let s=+slide.value||0;
-let u=urgent.checked?15000:0;
-total.textContent="Rp "+((PRICE[t]*s)+u).toLocaleString("id-ID");
+function formatIDR(n) { return "Rp " + n.toLocaleString("id-ID"); }
+
+function animateTotal(newTotal) {
+    const el = document.getElementById("totalDisplay");
+    const duration = 400; 
+    let startTime = null;
+    let startVal = lastTotal;
+
+    function step(t) {
+        if (!startTime) startTime = t;
+        let progress = Math.min((t - startTime) / duration, 1);
+        let current = Math.floor(startVal + (newTotal - startVal) * progress);
+        el.textContent = formatIDR(current);
+        if (progress < 1) requestAnimationFrame(step);
+        else lastTotal = newTotal;
+    }
+    requestAnimationFrame(step);
 }
+
+function calcAI() {
+    const t = document.getElementById("type").value;
+    const s = Math.max(0, parseInt(document.getElementById("slide").value) || 0);
+    const u = document.getElementById("urgent").checked ? 15000 : 0;
+    let total = s > 0 ? (PRICE[t] * s) + u : 0;
+    animateTotal(total);
+}
+
+["type", "slide", "urgent"].forEach(id => {
+    document.getElementById(id).addEventListener("input", calcAI);
+});
+
+function openAI(){ document.getElementById("aiPopup").style.display="grid"; calcAI(); }
+function closeAI(){ document.getElementById("aiPopup").style.display="none"; }
+
 function sendWA(){
-let msg=`Order AI:%0A${type.value}%0ASlide:${slide.value}%0ATotal:${total.textContent}`;
-location.href="https://wa.me/6282125283598?text="+msg;
+    const total = document.getElementById("totalDisplay").textContent;
+    const type = document.getElementById("type").value;
+    const qty = document.getElementById("slide").value;
+    if(qty < 1) return alert("Isi jumlah dulu kak!");
+    let msg=`Halo Admin Jokiinaja!%0ASaya mau order via AI:%0A- Jenis: ${type}%0A- Jumlah: ${qty}%0A- Estimasi: ${total}`;
+    window.open("https://wa.me/6282125283598?text="+msg, "_blank");
 }
 
+/* SLIDE LOGIC */
 let idx=0;
 function slide(d){
-const track=document.getElementById("track");
-const max=Math.ceil(track.children.length/3)-1;
-idx=Math.max(0,Math.min(idx+d,max));
-track.style.transform=`translateX(-${idx*100}%)`;
+    const track=document.getElementById("track");
+    const cards = track.children.length;
+    let visibleCards = 3;
+    if(window.innerWidth <= 900) visibleCards = 2;
+    if(window.innerWidth <= 768) visibleCards = 1;
+    
+    const max = cards - visibleCards;
+    idx = Math.max(0, Math.min(idx + d, max));
+    
+    const gap = 24; // 1.5rem
+    const cardWidth = track.querySelector(".testi-card").offsetWidth;
+    track.style.transform = `translateX(-${idx * (cardWidth + gap)}px)`;
 }
 
 function toggleTheme(){
-document.documentElement.dataset.theme=
-document.documentElement.dataset.theme==="dark"?"light":"dark";
+    document.documentElement.dataset.theme = document.documentElement.dataset.theme==="dark"?"light":"dark";
 }
+
+const navMenu = document.getElementById("navMenu");
+document.getElementById("menuBtn").addEventListener("click", () => {
+    navMenu.classList.toggle("show");
+});
+
+document.querySelectorAll("#navMenu a").forEach(link => {
+    link.addEventListener("click", () => navMenu.classList.remove("show"));
+});
 
 function reveal(){
-document.querySelectorAll(".reveal").forEach(el=>{
-let r=el.getBoundingClientRect();
-(r.top<innerHeight*0.85 && r.bottom>120)
-?el.classList.add("show")
-:el.classList.remove("show");
-});
+    document.querySelectorAll(".reveal").forEach(el=>{
+        let r=el.getBoundingClientRect();
+        if(r.top < window.innerHeight*0.9) el.classList.add("show");
+    });
 }
-addEventListener("scroll",reveal);
-addEventListener("load",()=>{
-reveal();
-document.documentElement.style.setProperty("--header-h",
-document.querySelector("header").offsetHeight+"px");
-});
 
-/* ACTIVE MENU */
+window.addEventListener("scroll", reveal);
+window.addEventListener("load", reveal);
+
+/* ACTIVE NAV */
 const sections=document.querySelectorAll("section[id]");
 const navLinks=document.querySelectorAll("nav ul a[href^='#']");
-function setActive(){
-let y=window.pageYOffset+120;
-sections.forEach(sec=>{
-let top=sec.offsetTop;
-let h=sec.offsetHeight;
-if(y>=top && y<top+h){
-navLinks.forEach(a=>a.classList.remove("active"));
-let a=document.querySelector(`nav a[href="#${sec.id}"]`);
-if(a)a.classList.add("active");
-}
+window.addEventListener("scroll", () => {
+    let y=window.pageYOffset+150;
+    sections.forEach(sec=>{
+        if(y>=sec.offsetTop && y<sec.offsetTop+sec.offsetHeight){
+            navLinks.forEach(a=>a.classList.remove("active"));
+            let a=document.querySelector(`nav a[href="#${sec.id}"]`);
+            if(a)a.classList.add("active");
+        }
+    });
 });
-}
-addEventListener("scroll",setActive);
-addEventListener("load",setActive);
 </script>
 
 </body>
