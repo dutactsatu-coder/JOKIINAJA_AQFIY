@@ -2,26 +2,27 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>JOKIINAJA BY AQFIY</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
---bg:#020617;
---glass:rgba(255,255,255,.08);
---border:rgba(255,255,255,.15);
---primary:#38bdf8;
---accent:#a78bfa;
---text:#e5e7eb;
+--bg:#f8fafc;
+--glass:rgba(255,255,255,.7);
+--border:rgba(0,0,0,.08);
+--primary:#2563eb;
+--accent:#7c3aed;
+--text:#0f172a;
+--muted:#64748b;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
 font-family:Poppins,sans-serif;
-background:#020617;
+background:var(--bg);
 color:var(--text);
 overflow-x:hidden;
 }
@@ -29,8 +30,8 @@ overflow-x:hidden;
 /* ================= HEADER ================= */
 header{
 position:fixed;top:0;width:100%;
-background:rgba(2,6,23,.65);
-backdrop-filter:blur(15px);
+background:rgba(255,255,255,.7);
+backdrop-filter:blur(14px);
 border-bottom:1px solid var(--border);
 z-index:100;
 }
@@ -50,8 +51,7 @@ background:linear-gradient(90deg,var(--primary),var(--accent));
 color:transparent;
 }
 nav ul{display:flex;gap:2rem;list-style:none}
-nav a{color:var(--text);text-decoration:none}
-.menu{display:none}
+nav a{color:var(--text);text-decoration:none;font-weight:500}
 
 /* ================= HERO ================= */
 .hero{
@@ -63,41 +63,42 @@ padding:2rem;
 position:relative;
 overflow:hidden;
 background:
-linear-gradient(to bottom,rgba(2,6,23,.85),rgba(2,6,23,.95)),
-url("https://images.unsplash.com/photo-1513258496099-48168024aec0");
+linear-gradient(to bottom,rgba(248,250,252,.85),rgba(248,250,252,.95)),
+url("https://images.unsplash.com/photo-1529070538774-1843cb3265df");
 background-size:cover;
 background-position:center;
 }
 
-/* ORB DECORATION */
+/* DECOR SHAPES */
+.hero::before,
 .hero::after{
 content:"";
 position:absolute;
-width:520px;height:520px;
-background:radial-gradient(circle,var(--primary),transparent 70%);
-filter:blur(130px);
-opacity:.25;
-top:-120px;left:-120px;
-animation:orbMove 12s linear infinite alternate;
+border-radius:50%;
+filter:blur(120px);
+opacity:.35;
 pointer-events:none;
-z-index:1;
-}
-
-@keyframes orbMove{
-from{transform:translate(0,0)}
-to{transform:translate(180px,160px)}
 }
 
 .hero::before{
-content:"";
-position:absolute;
+width:520px;height:520px;
+background:var(--primary);
+top:-160px;left:-160px;
+animation:float1 14s ease-in-out infinite alternate;
+}
+
+.hero::after{
 width:420px;height:420px;
-background:radial-gradient(circle,var(--accent),transparent 70%);
-filter:blur(140px);
-opacity:.18;
-bottom:-140px;right:-120px;
-pointer-events:none;
-z-index:1;
+background:var(--accent);
+bottom:-160px;right:-140px;
+animation:float2 16s ease-in-out infinite alternate;
+}
+
+@keyframes float1{
+to{transform:translate(200px,180px)}
+}
+@keyframes float2{
+to{transform:translate(-180px,-140px)}
 }
 
 .hero-content{
@@ -109,8 +110,7 @@ animation:heroFloat 7s ease-in-out infinite alternate;
 }
 
 @keyframes heroFloat{
-from{transform:translateY(0)}
-to{transform:translateY(-20px)}
+to{transform:translateY(-18px)}
 }
 
 .hero h1{font-size:3rem}
@@ -119,7 +119,7 @@ background:linear-gradient(90deg,var(--primary),var(--accent));
 -webkit-background-clip:text;
 color:transparent;
 }
-.hero p{opacity:.85;margin:1rem 0 2rem}
+.hero p{color:var(--muted);margin:1rem 0 2rem}
 
 /* ================= BUTTON ================= */
 .btn{
@@ -129,7 +129,7 @@ padding:.9rem 2.3rem;
 border-radius:999px;
 background:var(--glass);
 border:1px solid var(--border);
-color:white;
+color:var(--text);
 text-decoration:none;
 transition:.35s;
 position:relative;
@@ -140,6 +140,7 @@ cursor:pointer;
 .btn.primary{
 background:linear-gradient(135deg,var(--primary),var(--accent));
 border:none;
+color:white;
 }
 
 .btn:hover{transform:translateY(-4px)}
@@ -148,26 +149,22 @@ border:none;
 content:"";
 position:absolute;
 inset:0;
-background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
+background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);
 transform:translateX(-100%);
 transition:.6s;
 }
-
-.btn:hover::after{
-transform:translateX(100%);
-}
+.btn:hover::after{transform:translateX(100%)}
 
 /* ================= SECTION ================= */
 section{
-padding:6rem 2rem;
+padding:6rem 1.5rem;
 }
 
 .section-animate{
 opacity:0;
-transform:translateY(70px) scale(.95);
-transition:1.1s cubic-bezier(.19,1,.22,1);
+transform:translateY(60px);
+transition:1s cubic-bezier(.19,1,.22,1);
 }
-
 .section-animate.show{
 opacity:1;
 transform:none;
@@ -176,6 +173,7 @@ transform:none;
 .container{max-width:1200px;margin:auto}
 .title{text-align:center;margin-bottom:3rem}
 
+/* ================= GRID ================= */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -187,43 +185,51 @@ background:var(--glass);
 border:1px solid var(--border);
 border-radius:20px;
 padding:2rem;
-transition:.6s cubic-bezier(.19,1,.22,1);
+transition:.5s;
 }
 
 @media(hover:hover){
 .card:hover{
-transform:translateY(-14px) scale(1.05);
-box-shadow:0 0 35px rgba(167,139,250,.35);
+transform:translateY(-12px) scale(1.04);
+box-shadow:0 20px 40px rgba(0,0,0,.12);
 }
 }
 
-/* ================= TESTIMONI ================= */
+/* ================= TESTIMONI (FIX MOBILE) ================= */
 .testi-wrap{
 display:flex;
 align-items:center;
-gap:.8rem;
+gap:.6rem;
 }
 
 .testi{
 display:flex;
-gap:1.5rem;
+gap:1rem;
 overflow-x:auto;
 scroll-behavior:smooth;
+scroll-snap-type:x mandatory;
+padding:
+0
+calc(env(safe-area-inset-left) + 1rem)
+0
+calc(env(safe-area-inset-right) + 1rem);
 }
 
 .testi::-webkit-scrollbar{display:none}
 
 .testi-card{
-min-width:260px;
+flex:0 0 auto;
+width:clamp(240px,80vw,300px);
 background:var(--glass);
 border:1px solid var(--border);
 border-radius:18px;
 padding:1.5rem;
-transition:.6s;
+scroll-snap-align:start;
+transition:.4s;
 }
 
 @media(hover:hover){
-.testi-card:hover{transform:scale(1.08)}
+.testi-card:hover{transform:scale(1.05)}
 }
 
 .arrow{
@@ -231,14 +237,14 @@ width:42px;height:42px;
 border-radius:50%;
 border:1px solid var(--border);
 background:var(--glass);
-color:white;
 cursor:pointer;
+flex-shrink:0;
 }
 
-/* ================= POPUP AI ================= */
+/* ================= POPUP ================= */
 .popup{
 position:fixed;inset:0;
-background:rgba(0,0,0,.65);
+background:rgba(0,0,0,.4);
 display:none;
 align-items:center;
 justify-content:center;
@@ -246,8 +252,7 @@ z-index:999;
 }
 
 .popup-content{
-background:#020617;
-border:1px solid var(--border);
+background:white;
 border-radius:20px;
 padding:2rem;
 width:90%;
@@ -260,7 +265,7 @@ width:100%;
 padding:.7rem;
 margin:.4rem 0;
 border-radius:10px;
-border:none;
+border:1px solid var(--border);
 }
 
 /* ================= FOOTER ================= */
@@ -268,7 +273,7 @@ footer{
 text-align:center;
 padding:2rem;
 border-top:1px solid var(--border);
-background:#020617;
+background:white;
 }
 
 /* ================= RESPONSIVE ================= */
@@ -287,7 +292,7 @@ nav ul{display:none}
 <ul>
 <li><a href="#home">Home</a></li>
 <li><a href="#pricing">Harga</a></li>
-<li><a href="#testi">Testimoni</a></li>
+<li><a href="#testi">Ulasan</a></li>
 </ul>
 </nav>
 </header>
@@ -319,7 +324,7 @@ nav ul{display:none}
 
 <section id="testi" class="section-animate">
 <div class="container">
-<div class="title"><h2>Testimoni</h2></div>
+<div class="title"><h2>Ulasan Pelanggan</h2></div>
 
 <div class="testi-wrap">
 <button class="arrow" onclick="geser(-1)">❮</button>
@@ -327,7 +332,7 @@ nav ul{display:none}
 <div class="testi" id="testibox">
 <div class="testi-card">"Cepat & rapi" – Rizky</div>
 <div class="testi-card">"AI bantu banget" – Dinda</div>
-<div class="testi-card">"Langganan" – Kevin</div>
+<div class="testi-card">"Langganan tiap minggu" – Kevin</div>
 <div class="testi-card">"Deadline aman" – Aulia</div>
 <div class="testi-card">"PPT premium" – Fahmi</div>
 <div class="testi-card">"Privasi aman" – Anonymous</div>
@@ -383,12 +388,13 @@ window.open("https://wa.me/6282125283598?text="+encodeURIComponent(msg));
 }
 
 function geser(a){
-testibox.scrollBy({left:a*280,behavior:"smooth"});
+testibox.scrollBy({left:a*300,behavior:"smooth"});
 }
 
-let auto=setInterval(()=>geser(1),4000);
-testibox.addEventListener("touchstart",()=>clearInterval(auto));
-testibox.addEventListener("mouseenter",()=>clearInterval(auto));
+let auto=setInterval(()=>geser(1),4200);
+["touchstart","mouseenter"].forEach(e=>{
+testibox.addEventListener(e,()=>clearInterval(auto));
+});
 
 window.addEventListener("scroll",()=>{
 document.querySelectorAll(".section-animate").forEach(el=>{
