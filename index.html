@@ -8,513 +8,330 @@
 
 <style>
 :root{
---primary:#38bdf8;
---accent:#a78bfa;
---bg:#0b1220;
---soft:#0f172a;
---glass:rgba(255,255,255,.08);
---border:rgba(255,255,255,.15);
---text:#e6eeff;
---header-h:90px;
---safe-bottom: env(safe-area-inset-bottom, 20px);
+    --primary:#38bdf8;
+    --accent:#a78bfa;
+    --bg:#0b1220;
+    --soft:#0f172a;
+    --glass:rgba(255,255,255,.08);
+    --border:rgba(255,255,255,.15);
+    --text:#e6eeff;
+    --header-h:85px;
 }
+
 [data-theme="light"]{
---bg:#eef6ff;
---soft:#ffffff;
---glass:rgba(0,0,0,.05);
---border:rgba(0,0,0,.12);
---text:#0b1220;
+    --bg:#f0fdf4;
+    --soft:#ffffff;
+    --primary:#10b981; 
+    --accent:#3b82f6; 
+    --glass:rgba(16, 185, 129, 0.05);
+    --border:rgba(16, 185, 129, 0.2);
+    --text:#064e3b;
 }
+
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:var(--header-h)}
+
 body{
-font-family:Poppins,sans-serif;
-background:
-radial-gradient(900px 500px at 80% -10%,rgba(56,189,248,.18),transparent),
-radial-gradient(700px 400px at -10% 30%,rgba(167,139,250,.15),transparent),
-var(--bg);
-color:var(--text);
-overflow-x:hidden;
-transition:.4s;
+    font-family:Poppins,sans-serif;
+    background: var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+    transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* HEADER */
-header{
-position:fixed;top:0;width:100%;z-index:1000;
-backdrop-filter:blur(16px);
-background:rgba(10,15,30,.85);
-border-bottom:1px solid var(--border);
+/* --- SMART AUTO-HIDE HEADER --- */
+header {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    backdrop-filter: blur(20px); background: rgba(10, 15, 30, 0.75);
+    border-bottom: 1px solid var(--border);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
-nav{
-max-width:1200px;margin:auto;
-padding:1.2rem 2rem;
-display:flex;justify-content:space-between;align-items:center;
-}
-.logo{display:flex;align-items:baseline;gap:.6rem;font-weight:800}
-.logo-main{
-font-size:1.6rem;
-background:linear-gradient(90deg,var(--primary),var(--accent));
--webkit-background-clip:text;color:transparent;
-}
-.logo-sub{font-size:.7rem;letter-spacing:.14em;opacity:.7}
+header.hide { transform: translateY(-100%); }
+[data-theme="light"] header { background: rgba(255, 255, 255, 0.8); }
 
-nav ul{display:flex;gap:2rem;list-style:none}
-nav a{
-color:var(--text);
-text-decoration:none;
-font-weight:500;
-position:relative;
-cursor:pointer;
+nav { max-width: 1200px; margin: auto; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+
+/* --- LOGO 3D --- */
+.logo-box { perspective: 1000px; }
+.logo-inner { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; display: flex; flex-direction: column; }
+.logo-flip { transform: rotateY(360deg); }
+.logo-main { font-size: 1.6rem; font-weight: 800; background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; color: transparent; }
+.logo-sub { font-size: .7rem; font-weight: 700; letter-spacing: .14em; color: #ffffff !important; }
+
+/* --- REPEATABLE SCROLL REVEAL --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+    filter: blur(10px);
+    transition: all 0.7s cubic-bezier(0.2, 0, 0.2, 1);
 }
-nav a.active::after{
-content:"";
-position:absolute;
-left:0;bottom:-6px;
-width:100%;height:2px;
-background:var(--primary);
-}
-.menu{display:none;font-size:1.8rem;cursor:pointer}
-.theme-toggle{
-border:1px solid var(--border);
-background:var(--glass);
-padding:.4rem .9rem;
-border-radius:999px;
-cursor:pointer;
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
 }
 
-/* HERO */
-.hero{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:8rem 2rem 4rem;
-text-align:center;
+/* --- MENU ANIMATIONS --- */
+nav ul { display: flex; gap: 2rem; list-style: none; align-items: center; }
+nav li { overflow: hidden; }
+nav a { 
+    color: var(--text); text-decoration: none; font-weight: 500; opacity: 0.8; 
+    transition: 0.3s; position: relative; display: inline-block;
 }
-.hero h1{font-size:3.5rem;line-height:1.1}
-.hero span{
-background:linear-gradient(90deg,var(--primary),var(--accent));
--webkit-background-clip:text;
-color:transparent;
+nav a:hover { opacity: 1; color: var(--primary); transform: translateY(-2px); }
+nav a:active { transform: scale(0.9); }
+nav a::after {
+    content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+    background: var(--primary); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.hero p{opacity:.85;margin:1.6rem 0 2.5rem}
+nav a:hover::after { width: 100%; }
 
-/* BUTTON */
-.btn{
-padding:1rem 2.3rem;
-border-radius:999px;
-border:1px solid var(--border);
-background:var(--glass);
-color:var(--text);
-font-weight:600;
-text-decoration:none;
-cursor:pointer;
-transition:.3s;
-display:inline-block;
-}
-.btn.primary{
-background:linear-gradient(135deg,var(--primary),var(--accent));
-border:none; color: white;
-}
-.btn:hover{
-transform:translateY(-4px);
-box-shadow:0 10px 40px rgba(56,189,248,.45);
+/* --- THEME TOGGLE (ORBIT) --- */
+.theme-toggle { cursor: pointer; font-size: 1.5rem; display: inline-block; }
+.theme-toggle.animate { animation: orbit 0.6s forwards; }
+@keyframes orbit {
+    0% { transform: rotate(0) scale(1); }
+    50% { transform: rotate(180deg) scale(0.2); opacity: 0; }
+    100% { transform: rotate(360deg) scale(1); opacity: 1; }
 }
 
-/* SECTIONS */
-section{padding:6rem 2rem}
-.container{max-width:1200px;margin:auto}
-.title{text-align:center;margin-bottom:4rem}
-.title h2{font-size:2.8rem}
+/* --- HERO --- */
+section { padding: 8rem 2rem; }
+.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+.hero span { background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; color: transparent; }
 
-.reveal{
-opacity:0;
-transform:translateY(40px);
-transition:1s cubic-bezier(.19,1,.22,1);
+/* --- CARDS & GRID --- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.card {
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 24px; padding: 2.5rem; transition: 0.4s; text-align: center;
 }
-.reveal.show{opacity:1;transform:none}
+.card:hover { transform: translateY(-12px) scale(1.02); background: var(--soft); border-color: var(--primary); }
 
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:2rem;
+/* --- AI POPUP --- */
+#aiPopup {
+    position: fixed; inset: 0; background: rgba(0,0,0,0);
+    display: none; place-items: center; z-index: 2000;
+    backdrop-filter: blur(0px); transition: 0.5s ease;
 }
-.card{
-background:var(--glass);
-border:1px solid var(--border);
-border-radius:22px;
-padding:2.5rem;
-transition:.4s;
-text-align:center;
+#aiPopup.active { background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); }
+.ai-box {
+    background: var(--soft); border: 1px solid var(--border);
+    border-radius: 30px; padding: 2.5rem; width: 90%; max-width: 450px;
+    transform: scale(0.7) rotate(-5deg); opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.card:hover{
-transform:translateY(-10px);
-box-shadow:0 0 40px rgba(167,139,250,.35);
-}
+#aiPopup.active .ai-box { transform: scale(1) rotate(0deg); opacity: 1; }
 
-/* STATS */
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:2rem;
-text-align:center;
-}
-.stats h3{font-size:2.6rem;color:var(--primary)}
+/* --- TESTIMONI --- */
+.testi-container { position: relative; max-width: 1200px; margin: auto; padding: 0 70px; }
+.testi-viewport { overflow: hidden; }
+.testi-track { display: flex; gap: 1.5rem; transition: 0.8s cubic-bezier(0.2, 0, 0.2, 1); }
+.testi-card { flex: 0 0 calc(33.333% - 1rem); background: var(--glass); border-radius: 22px; padding: 2.5rem 1.5rem; text-align: center; border: 1px solid var(--border); }
+.arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: white; cursor: pointer; z-index: 10; border: none; }
+.arrow.left { left: 0; } .arrow.right { right: 0; }
 
-/* TESTIMONI - FIXED RESPONSIVE */
-.testimonial {
-    position: relative;
-    max-width: 1100px;
-    margin: auto;
-}
-.testi-viewport {
-    overflow: hidden;
-    width: 100%;
-    border-radius: 22px;
-}
-.testi-track {
-    display: flex;
-    gap: 1.5rem;
-    transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.testi-card {
-    flex: 0 0 calc(33.333% - 1rem); /* 3 Kolom di desktop */
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    padding: 2.5rem 1.5rem;
-    text-align: center;
-    box-sizing: border-box;
-}
-.testi-card span {
-    display: block;
-    margin-top: 15px;
-    color: var(--primary);
-    font-weight: 700;
-}
-
-.arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    background: var(--soft);
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 10;
-    transition: .3s;
-}
-.arrow.left { left: -55px; }
-.arrow.right { right: -55px; }
-
-/* AI POPUP */
-#aiPopup{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.8);
-display:none;
-place-items:center;
-z-index:2000;
-backdrop-filter:blur(8px);
-padding:20px;
-}
-.ai-box{
-background:var(--soft);
-border:2px solid var(--primary);
-border-radius:28px;
-padding:2rem;
-width:100%;
-max-width:460px;
-max-height: 90vh;
-overflow-y: auto;
-}
-.ai-box h3{text-align:center;font-size:1.8rem;margin-bottom:1rem}
-.ai-box label{display:block;margin:1rem 0 .4rem;opacity:.8;font-size:0.9rem}
-.ai-box select, .ai-box input{
-width:100%;
-padding:.8rem;
-border-radius:12px;
-border:1px solid var(--border);
-background:var(--glass);
-color:var(--text);
-outline:none;
-}
-.ai-total{
-margin:1.5rem 0;
-font-size:2.2rem;
-text-align:center;
-color:var(--primary);
-font-weight:800;
-}
-
-/* FLOATING BUTTONS */
-.float-container {
-    position: fixed;
-    right: 20px;
-    bottom: var(--safe-bottom);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    z-index: 999;
-}
-.float{
-    width:55px;height:55px;
-    border-radius:50%;
-    display:grid;place-items:center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
-.float.wa { background: #25d366; }
-.float.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-.float svg{width:26px;height:26px}
-
-/* RESPONSIVE BREAKPOINTS */
-@media(max-width:1150px) {
-    .arrow.left { left: 10px; }
-    .arrow.right { right: 10px; }
-}
-
-@media(max-width:900px){
-    .testi-card { flex: 0 0 calc(50% - 0.75rem); }
-}
-
+/* --- MOBILE --- */
 @media(max-width:768px){
-    nav ul{
-        position:fixed;top:0;right:-100%;
-        background:var(--soft);
-        flex-direction:column;
-        width:260px;height: 100vh;
-        padding:5rem 2rem;
-        transition: 0.4s;
+    nav ul { 
+        position: fixed; top: 0; right: -100%; background: var(--soft); 
+        flex-direction: column; width: 280px; height: 100vh; 
+        padding: 7rem 2rem; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
     }
-    nav ul.show{right:0}
-    .menu{display:block; z-index: 1001;}
-    .hero h1{font-size:2.5rem}
-    
-    .testi-card { flex: 0 0 100%; } /* Satu ulasan per layar di HP */
-    .arrow { top: auto; bottom: -60px; transform: none; }
-    .arrow.left { left: 30%; }
-    .arrow.right { right: 30%; }
-    .testimonial { padding-bottom: 80px; }
+    nav ul.show { right: 0; }
+    nav ul.show li { animation: slideLeft 0.5s forwards; opacity: 0; }
+    @keyframes slideLeft { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .menu { display: block; font-size: 1.8rem; cursor: pointer; }
+    .testi-container { padding: 0 10px; }
+    .testi-card { flex: 0 0 100%; }
+    .arrow { top: auto; bottom: -70px; }
+    .arrow.left { left: 25%; } .arrow.right { right: 25%; }
 }
 </style>
 </head>
 
 <body>
-
-<header>
+<header id="mainHeader">
 <nav>
-<div class="logo">
-<span class="logo-main">JOKIINAJA</span>
-<span class="logo-sub">BY AQFIY</span>
+<div class="logo-box"><div class="logo-inner" id="logoAnim"><span class="logo-main">JOKIINAJA</span><span class="logo-sub">BY AQFIY</span></div></div>
+<div style="display:flex; align-items:center; gap:20px">
+    <span class="theme-toggle" onclick="toggleTheme()" id="tglIcon">🌓</span>
+    <div class="menu" id="menuBtn">☰</div>
 </div>
-<div class="menu" id="menuBtn">☰</div>
 <ul id="navMenu">
-<li><a href="#home">Home</a></li>
-<li><a href="#services">Layanan</a></li>
-<li><a href="#stats">Keunggulan</a></li>
-<li><a href="#pricing">Harga</a></li>
-<li><a href="#testi">Ulasan</a></li>
-<li><a onclick="openAI()">AI Order</a></li>
-<li><span class="theme-toggle" onclick="toggleTheme()">🌗</span></li>
+    <li><a href="#home" onclick="handleMenuClick(this)">Home</a></li>
+    <li><a href="#services" onclick="handleMenuClick(this)">Layanan</a></li>
+    <li><a href="#pricing" onclick="handleMenuClick(this)">Keunggulan</a></li>
+    <li><a href="#testi" onclick="handleMenuClick(this)">Ulasan</a></li>
+    <li><button class="btn" onclick="openAI(); closeMenu()" style="background:var(--primary); color:white; border:none; padding:0.8rem 1.5rem; border-radius:99px; font-weight:700; cursor:pointer">AI Order</button></li>
 </ul>
 </nav>
 </header>
 
-<section id="home" class="hero reveal">
-<div>
-<h1>Joki Tugas <span>Profesional</span><br>Pelajar & Mahasiswa</h1>
-<p>Cepat • Aman • 24/7 • Privasi 100%</p>
-<div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
-    <button class="btn primary" onclick="openAI()">Order via AI</button>
-    <a class="btn" href="https://wa.me/6282125283598">WhatsApp</a>
-</div>
+<section id="home" class="hero">
+<div class="hero-content">
+    <h1 class="reveal">Joki Tugas <span>Profesional</span><br>Biar Lo Bisa Turu.</h1>
+    <p class="reveal" style="margin:1.5rem 0 2.5rem; opacity:0.8; font-style: italic;">"Ngapain begadang nugas kalau bisa bayar orang? Lo istirahat, nilai lo biar kita yang urus."</p>
+    <div class="reveal" style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap">
+        <button class="btn" style="background:var(--primary); color:white; border:none; padding:1rem 2rem; border-radius:99px; font-weight:700; cursor:pointer" onclick="openAI()">✨ Hitung Harga AI</button>
+        <a class="btn" href="https://wa.me/6282125283598" style="padding:1rem 2rem; border-radius:99px; border:1px solid var(--border); color:var(--text); text-decoration:none; font-weight:700">Chat Admin</a>
+    </div>
 </div>
 </section>
 
-<section id="services"><div class="container reveal">
-<div class="title"><h2>Layanan</h2></div>
-<div class="grid">
-<div class="card">Laporan & Makalah</div>
-<div class="card">PPT Premium</div>
-<div class="card">Ringkasan Materi</div>
-<div class="card">Jurnal & Pengetikan</div>
+<section id="services">
+<div class="container">
+    <h2 class="reveal" style="text-align:center; margin-bottom:3rem">Layanan Kami</h2>
+    <div class="grid">
+        <div class="card reveal"><h3>📑 Laporan</h3><p>Makalah, Paper, Praktikum Beres.</p></div>
+        <div class="card reveal"><h3>📊 PPT</h3><p>Desain Modern & Animatif.</p></div>
+        <div class="card reveal"><h3>✍️ Ringkasan</h3><p>Resume Materi & Buku.</p></div>
+        <div class="card reveal"><h3>📖 Jurnal</h3><p>Tugas Penulisan Ilmiah.</p></div>
+    </div>
 </div>
-</div></section>
+</section>
 
-<section id="stats"><div class="container reveal">
-<div class="title"><h2>Keunggulan</h2></div>
-<div class="stats">
-<div><h3>500+</h3><p>Tugas Selesai</p></div>
-<div><h3>24/7</h3><p>Jam Operasional</p></div>
-<div><h3>100%</h3><p>Privasi Aman</p></div>
-<div><h3>Gratis</h3><p>Revisi Ringan</p></div>
+<section id="pricing">
+<div class="container">
+    <h2 class="reveal" style="text-align:center; margin-bottom:3rem">Mengapa Memilih Kami?</h2>
+    <div class="grid">
+        <div class="card reveal" style="border-top: 4px solid var(--primary)"><h3>Admin 24/7</h3><p>Chat jam 2 pagi karena panik deadline? Tenang, kita standby buat lo.</p></div>
+        <div class="card reveal" style="border-top: 4px solid var(--accent)"><h3>Anti Plagiasi</h3><p>Dikerjain manual bukan bot. Dosen lo nggak bakal curiga.</p></div>
+        <div class="card reveal" style="border-top: 4px solid #facc15"><h3>Privasi Aman</h3><p>Identitas aman. Temen lo taunya lo pinter, padahal lo pinter milih joki.</p></div>
+    </div>
 </div>
-</div></section>
+</section>
 
-<section id="pricing"><div class="container reveal">
-<div class="title"><h2>Harga Kisaran</h2></div>
-<div class="grid">
-<div class="card">Laporan: Rp100K – 200K</div>
-<div class="card">PPT: Rp45K – 90K</div>
-<div class="card">Ringkasan: Rp50K – 110K</div>
-<div class="card">Jurnal: Rp100K – 230K</div>
+<section id="testi">
+<div class="testi-container reveal">
+    <h2 style="text-align:center; margin-bottom:3rem">Apa Kata Mereka?</h2>
+    <button class="arrow left" onclick="slide(-1)">‹</button><button class="arrow right" onclick="slide(1)">›</button>
+    <div class="testi-viewport"><div class="testi-track" id="track">
+        <div class="testi-card">"Gak perlu pusing lagi mikirin laporan praktikum."<br><span>- Rizky</span></div>
+        <div class="testi-card">"PPT nya gila sih, rapi banget. Auto dapet A."<br><span>- Fahmi</span></div>
+        <div class="testi-card">"Adminnya sabar banget nungguin revisi."<br><span>- Aulia</span></div>
+        <div class="testi-card">"Worth it parah buat yang mager nugas."<br><span>- Nabila</span></div>
+    </div></div>
 </div>
-</div></section>
-
-<section id="testi"><div class="container reveal testimonial">
-<div class="title"><h2>Ulasan Pelanggan</h2></div>
-<div class="arrow left" onclick="slide(-1)">‹</div>
-<div class="arrow right" onclick="slide(1)">›</div>
-<div class="testi-viewport">
-<div class="testi-track" id="track">
-<div class="testi-card">"Pengerjaan sangat cepat dan rapi banget hasilnya."<br><span>Rizky</span></div>
-<div class="testi-card">"PPT premium desainnya keren, dapet nilai A!"<br><span>Fahmi</span></div>
-<div class="testi-card">"Deadline mepet tetap aman ditangan admin."<br><span>Aulia</span></div>
-<div class="testi-card">"Ringkasan materinya jelas dan mudah dipahami."<br><span>Nabila</span></div>
-<div class="testi-card">"Sudah jadi langganan tiap semester. Mantap!"<br><span>Kevin</span></div>
-<div class="testi-card">"Privasi benar-benar dijaga. Recommended!"<br><span>Anonim</span></div>
-</div>
-</div>
-</div></section>
+</section>
 
 <div id="aiPopup">
 <div class="ai-box">
-<h3>AI Order</h3>
-<label>Jenis Tugas</label>
-<select id="type">
-<option value="laporan">Laporan (4k/hal)</option>
-<option value="ppt">PPT (4.5k/slide)</option>
-<option value="ringkasan">Ringkasan (5k/hal)</option>
-<option value="jurnal">Jurnal (6k/hal)</option>
-</select>
-<label>Jumlah Slide/Halaman</label>
-<input type="number" id="slide" value="1" min="1">
-<label style="display:flex; align-items:center; gap:10px; cursor:pointer">
-    <input type="checkbox" id="urgent" style="width:auto"> Urgent (Ekspres) +15k
-</label>
-<div class="ai-total" id="totalDisplay">Rp 0</div>
-<button class="btn primary" style="width:100%; margin-bottom:10px" onclick="sendWA()">Order via WhatsApp</button>
-<button class="btn" style="width:100%" onclick="closeAI()">Tutup</button>
+    <h3 style="text-align:center">🤖 AI Kalkulator</h3>
+    <div style="margin-top:20px">
+        <select id="type" oninput="calcAI()" style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px; background:var(--glass); color:var(--text); border:1px solid var(--border)">
+            <option value="laporan">Laporan (4k/hal)</option>
+            <option value="ppt">PPT (4.5k/slide)</option>
+            <option value="ringkasan">Ringkasan (5k/hal)</option>
+        </select>
+        <input type="number" id="slide" value="1" min="1" oninput="calcAI()" style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px; background:var(--glass); color:var(--text); border:1px solid var(--border)">
+        <div id="totalDisplay" style="text-align:center; font-size:2rem; color:var(--primary); margin-bottom:20px; font-weight:800">Rp 4.000</div>
+        <button class="btn" style="width:100%; background:var(--primary); color:white; border:none; padding:1rem; border-radius:12px; font-weight:700; cursor:pointer; margin-bottom:10px" onclick="sendWA()">🚀 Order Sekarang</button>
+        <button class="btn" style="width:100%; background:transparent; color:var(--text); border:1px solid var(--border); padding:1rem; border-radius:12px; cursor:pointer" onclick="closeAI()">Tutup</button>
+    </div>
 </div>
-</div>
-
-<div class="float-container">
-    <a class="float wa" href="https://wa.me/6282125283598" aria-label="WhatsApp">
-        <svg viewBox="0 0 32 32" fill="white"><path d="M16 2.9C8.7 2.9 2.9 8.7 2.9 16c0 2.6.7 5.1 2.1 7.2L3 29l6-1.9c2 1.1 4.4 1.7 7 1.7 7.3 0 13.1-5.8 13.1-13.1S23.3 2.9 16 2.9z"/></svg>
-    </a>
-    <a class="float ig" href="https://instagram.com/jokiinaja_byaqfiy" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" fill="white"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5z M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>
-    </a>
 </div>
 
 <script>
-const PRICE={laporan:4000,ppt:4500,ringkasan:5000,jurnal:6000};
-let lastTotal = 0;
+// --- INFINITE SCROLL & HEADER HIDE ---
+let lastScroll = 0;
+const header = document.getElementById("mainHeader");
 
-function formatIDR(n) { return "Rp " + n.toLocaleString("id-ID"); }
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        // Toggle class 'active' setiap kali elemen masuk/keluar layar
+        if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+        } else {
+            // Hapus class agar bisa beranimasi ulang saat scroll kembali
+            entry.target.classList.remove("active");
+        }
+    });
+}, { threshold: 0.15 });
 
-function animateTotal(newTotal) {
-    const el = document.getElementById("totalDisplay");
-    const duration = 400; 
-    let startTime = null;
-    let startVal = lastTotal;
+document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
 
-    function step(t) {
-        if (!startTime) startTime = t;
-        let progress = Math.min((t - startTime) / duration, 1);
-        let current = Math.floor(startVal + (newTotal - startVal) * progress);
-        el.textContent = formatIDR(current);
-        if (progress < 1) requestAnimationFrame(step);
-        else lastTotal = newTotal;
+window.addEventListener("scroll", () => {
+    const currentScroll = window.pageYOffset;
+    if (currentScroll <= 0) {
+        header.classList.remove("hide");
+        return;
     }
-    requestAnimationFrame(step);
-}
-
-function calcAI() {
-    const t = document.getElementById("type").value;
-    const s = Math.max(0, parseInt(document.getElementById("slide").value) || 0);
-    const u = document.getElementById("urgent").checked ? 15000 : 0;
-    let total = s > 0 ? (PRICE[t] * s) + u : 0;
-    animateTotal(total);
-}
-
-["type", "slide", "urgent"].forEach(id => {
-    document.getElementById(id).addEventListener("input", calcAI);
+    if (currentScroll > lastScroll && !header.classList.contains("hide")) {
+        header.classList.add("hide");
+    } else if (currentScroll < lastScroll && header.classList.contains("hide")) {
+        header.classList.remove("hide");
+    }
+    lastScroll = currentScroll;
 });
 
-function openAI(){ document.getElementById("aiPopup").style.display="grid"; calcAI(); }
-function closeAI(){ document.getElementById("aiPopup").style.display="none"; }
-
-function sendWA(){
-    const total = document.getElementById("totalDisplay").textContent;
-    const type = document.getElementById("type").value;
-    const qty = document.getElementById("slide").value;
-    if(qty < 1) return alert("Isi jumlah dulu kak!");
-    let msg=`Halo Admin Jokiinaja!%0ASaya mau order via AI:%0A- Jenis: ${type}%0A- Jumlah: ${qty}%0A- Estimasi: ${total}`;
-    window.open("https://wa.me/6282125283598?text="+msg, "_blank");
+// --- MENU CLICK ANIMATION ---
+function handleMenuClick(el) {
+    // Pulse animation
+    el.style.transform = "scale(1.2)";
+    setTimeout(() => {
+        el.style.transform = "scale(1)";
+        closeMenu();
+    }, 200);
 }
 
-/* SLIDE LOGIC */
+// --- THEME & LOGO ---
+function toggleTheme(){
+    const html = document.documentElement;
+    const logo = document.getElementById("logoAnim");
+    const icon = document.getElementById("tglIcon");
+    const next = html.dataset.theme === "dark" ? "light" : "dark";
+    
+    logo.classList.add("logo-flip");
+    icon.classList.add("animate");
+    
+    setTimeout(() => {
+        html.dataset.theme = next;
+        icon.textContent = next === "dark" ? "🌓" : "☀️";
+    }, 300);
+
+    setTimeout(() => {
+        logo.classList.remove("logo-flip");
+        icon.classList.remove("animate");
+    }, 800);
+}
+
+// --- AI POPUP ---
+function openAI(){
+    const pop = document.getElementById("aiPopup");
+    pop.style.display = "grid";
+    setTimeout(() => pop.classList.add("active"), 10);
+}
+function closeAI(){
+    const pop = document.getElementById("aiPopup");
+    pop.classList.remove("active");
+    setTimeout(() => pop.style.display = "none", 500);
+}
+
+// --- UTILS ---
+const PRICE={laporan:4000,ppt:4500,ringkasan:5000};
+function calcAI(){
+    const t = document.getElementById("type").value;
+    const s = document.getElementById("slide").value || 0;
+    document.getElementById("totalDisplay").textContent = "Rp " + (PRICE[t]*s).toLocaleString("id-ID");
+}
+
 let idx=0;
 function slide(d){
-    const track=document.getElementById("track");
-    const cards = track.children.length;
-    let visibleCards = 3;
-    if(window.innerWidth <= 900) visibleCards = 2;
-    if(window.innerWidth <= 768) visibleCards = 1;
-    
-    const max = cards - visibleCards;
-    idx = Math.max(0, Math.min(idx + d, max));
-    
-    const gap = 24; // 1.5rem
-    const cardWidth = track.querySelector(".testi-card").offsetWidth;
-    track.style.transform = `translateX(-${idx * (cardWidth + gap)}px)`;
-}
-
-function toggleTheme(){
-    document.documentElement.dataset.theme = document.documentElement.dataset.theme==="dark"?"light":"dark";
+    const track = document.getElementById("track");
+    const cardWidth = track.querySelector(".testi-card").offsetWidth + 24;
+    idx = Math.max(0, Math.min(idx + d, track.children.length - (window.innerWidth > 900 ? 3 : 1)));
+    track.style.transform = `translateX(-${idx * cardWidth}px)`;
 }
 
 const navMenu = document.getElementById("navMenu");
-document.getElementById("menuBtn").addEventListener("click", () => {
+const menuBtn = document.getElementById("menuBtn");
+menuBtn.onclick = () => {
     navMenu.classList.toggle("show");
-});
-
-document.querySelectorAll("#navMenu a").forEach(link => {
-    link.addEventListener("click", () => navMenu.classList.remove("show"));
-});
-
-function reveal(){
-    document.querySelectorAll(".reveal").forEach(el=>{
-        let r=el.getBoundingClientRect();
-        if(r.top < window.innerHeight*0.9) el.classList.add("show");
-    });
-}
-
-window.addEventListener("scroll", reveal);
-window.addEventListener("load", reveal);
-
-/* ACTIVE NAV */
-const sections=document.querySelectorAll("section[id]");
-const navLinks=document.querySelectorAll("nav ul a[href^='#']");
-window.addEventListener("scroll", () => {
-    let y=window.pageYOffset+150;
-    sections.forEach(sec=>{
-        if(y>=sec.offsetTop && y<sec.offsetTop+sec.offsetHeight){
-            navLinks.forEach(a=>a.classList.remove("active"));
-            let a=document.querySelector(`nav a[href="#${sec.id}"]`);
-            if(a)a.classList.add("active");
-        }
-    });
-});
+    menuBtn.textContent = navMenu.classList.contains("show") ? "✕" : "☰";
+};
+function closeMenu(){ navMenu.classList.remove("show"); menuBtn.textContent = "☰"; }
+function sendWA(){ window.open("https://wa.me/6282125283598", "_blank"); }
 </script>
-
 </body>
 </html>
